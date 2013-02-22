@@ -24,6 +24,7 @@ module SimpleDeploy
       end
 
       def send(message)
+        begin
         @logger.info "Sending Campfire notifications."
         @room_ids.split(',').each do |room_id|
           @logger.debug "Sending notification to Campfire room #{room_id}."
@@ -31,6 +32,9 @@ module SimpleDeploy
           room.speak message
         end
         @logger.info "Campfire notifications complete."
+        rescue
+          @logger.warn "Failed to send notification to Campfire room #{room_id}."
+        end
       end
 
       private

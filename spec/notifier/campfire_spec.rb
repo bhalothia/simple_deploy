@@ -91,6 +91,8 @@ describe SimpleDeploy do
     it "should not blow up if campfire_subdom & campfire_room_ids are not present" do
       @campfire.send(:message => 'heh you guys!')
     end
+
+    it "should catch exception if it can't send to campfire"
   end
 
 end
