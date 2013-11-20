@@ -27,7 +27,7 @@ if [ -f ~/.jenkins.sh ]; then
   simple_deploy envs
 
   echo simple_deploy list --------------
-  simple_deploy list -e default
+  simple_deploy notlist -e default
 
   echo simple_deploy create --------------
 #  simple_deploy create -e default -n jenkins-test-stack
