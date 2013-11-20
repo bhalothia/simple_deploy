@@ -1,6 +1,6 @@
 #!/bin/bash
 
-minute=`date "+%m"`
+stamp=`date "+%s"`
 
 # Source my jenkins config if available
 if [ -f ~/.jenkins.sh ]; then
@@ -38,77 +38,77 @@ if [ $? -ne 0 ]; then
 fi
 
 echo simple_deploy create --------------
-simple_deploy create -e default -n jenkins-test-stack-$minute -t ./script/eip.json
+simple_deploy create -e default -n jenkins-test-stack-$stamp -t ./script/eip.json
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy instances --------------
-simple_deploy instances -e default -n jenkins-test-stack-$minute
+simple_deploy instances -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy attributes --------------
-simple_deploy attributes -e default -n jenkins-test-stack-$minute
+simple_deploy attributes -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy outputs --------------
-simple_deploy outputs -e default -n jenkins-test-stack-$minute
+simple_deploy outputs -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy resources --------------
-simple_deploy resources -e default -n jenkins-test-stack-$minute
+simple_deploy resources -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy template --------------
-simple_deploy template -e default -n jenkins-test-stack-$minute
+simple_deploy template -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy status --------------
-simple_deploy status -e default -n jenkins-test-stack-$minute
+simple_deploy status -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy events --------------
-simple_deploy events -e default -n jenkins-test-stack-$minute
+simple_deploy events -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy update --------------
-simple_deploy update -e default -n jenkins-test-stack-$minute -a jenkins_test_val=testvalue
+simple_deploy update -e default -n jenkins-test-stack-$stamp -a jenkins_test_val=testvalue
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy update with nil value --------------
-simple_deploy update -e default -n jenkins-test-stack-$minute -a jenkins_test_val=nil
+simple_deploy update -e default -n jenkins-test-stack-$stamp -a jenkins_test_val=nil
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
 fi
 
 echo simple_deploy destroy --------------
-simple_deploy destroy -e default -n jenkins-test-stack-$minute
+simple_deploy destroy -e default -n jenkins-test-stack-$stamp
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
