@@ -25,12 +25,13 @@ rake install
 
 echo simple_deploy envs --------------
 simple_deploy envs
-  
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy list --------------
 simple_deploy list -e default
-
-echo simple_deploy failure --------------
-simple_deploy clone -e default -n jenkins-test-stack
 
 if [ $? -ne 0 ]; then
   EXITSTATUS=1
