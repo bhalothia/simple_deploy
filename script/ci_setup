@@ -29,41 +29,102 @@ simple_deploy envs
 echo simple_deploy list --------------
 simple_deploy list -e default
 
+echo simple_deploy failure --------------
+simple_deploy clone -e default -n jenkins-test-stack
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy create --------------
 #  simple_deploy create -e default -n jenkins-test-stack
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
 
 echo simple_deploy instances --------------
 #  simple_deploy instances -e default -n jenkins-test-stack
 
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy attributes --------------
 #  simple_deploy attributes -e default -n jenkins-test-stack
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
 
 echo simple_deploy outputs --------------
 #  simple_deploy outputs -e default -n jenkins-test-stack
 
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy resources --------------
 #  simple_deploy resources -e default -n jenkins-test-stack
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
 
 echo simple_deploy template --------------
 #  simple_deploy template -e default -n jenkins-test-stack
 
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy status --------------
 #  simple_deploy status -e default -n jenkins-test-stack
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
 
 echo simple_deploy events --------------
 #  simple_deploy events -e default -n jenkins-test-stack
 
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy deploy --------------
 #  simple_deploy deploy -e default -n jenkins-test-stack -a app=c1e025a5d5702bfcee42b2b742d466e6ad18d393 -f
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
 
 echo simple_deploy update --------------
 #  simple_deploy update -e default -n jenkins-test-stack -a jenkins_test_val=testvalue
 
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy update --------------
 #  simple_deploy update -e default -n jenkins-test-stack -a jenkins_test_val=nil
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
 
 echo simple_deploy deploy --------------
 #  simple_deploy deploy -e default -n jenkins-test-stack -a app=c1e025a5d5702bfcee42b2b742d466e6ad18d393
 
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
 echo simple_deploy destroy --------------
 #  simple_deploy destroy -e default -n jenkins-test-stack
+
+if [ $? -ne 0 ]; then
+  EXITSTATUS=1
+fi
+
+exit $EXITSTATUS
