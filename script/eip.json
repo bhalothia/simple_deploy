@@ -1,0 +1,41 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Description": "EIP (in VPC)",
+
+  "Parameters": {
+
+    "Description": {
+      "Default": "",
+      "Description": "Purpose of this EIP",
+      "Type": "String"
+    }
+
+  },
+
+  "Resources": {
+
+    "Eip": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc"
+      }
+    }
+
+  },
+
+  "Outputs": {
+
+    "EipAllocationId": {
+      "Description": "Allocation ID for the EIP",
+      "Value": { "Fn::GetAtt": ["Eip" , "AllocationId" ] }
+    },
+
+    "PublicIp": {
+      "Description": "Public IP",
+      "Value": { "Ref": "Eip" }
+    }
+
+  }
+
+}
