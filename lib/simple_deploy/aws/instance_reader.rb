@@ -2,7 +2,10 @@ module SimpleDeploy
   class AWS
     class InstanceReader
       def initialize
-        @config  = SimpleDeploy.config
+        @config = SimpleDeploy.config
+        @logger = SimpleDeploy.logger
+        @backoff_count = 0
+        @attempts = 0
       end
 
       def list_stack_instances(stack_name)
@@ -18,11 +21,27 @@ module SimpleDeploy
       private
 
       def list_instances(asg_id)
+        @backoff_count += 1
         @asg ||= Fog::AWS::AutoScaling.new :aws_access_key_id => @config.access_key,
                                            :aws_secret_access_key => @config.secret_key,
                                            :region => @config.region
 
-        body = @asg.describe_auto_scaling_groups('AutoScalingGroupNames' => [asg_id]).body
+        @attempts = 0
+        begin
+          body = @asg.describe_auto_scaling_groups('AutoScalingGroupNames' => [asg_id]).body
+        rescue Exception => e
+          if ((e.message == "Throttling => Rate exceeded") && (@attempts < 5)) 
+            @logger.info "Throttling rate exceeded"
+            SimpleDeploy::Backoff.exp_periods(@backoff_count < 5 ? @backoff_count : 5) do |backoff|
+              @logger.info "Backing off for #{backoff} seconds. Attempt = #{@attempts}"
+              sleep backoff
+            end
+            @attempts += 1
+            @backoff_count += 1
+            retry 
+          end 
+        end
+
         result = body['DescribeAutoScalingGroupsResult']['AutoScalingGroups'].last
         return [] unless result
 
@@ -30,12 +49,27 @@ module SimpleDeploy
       end
 
       def describe_instances(instances)
+        @backoff_count += 1
         @ec2 ||= Fog::Compute::AWS.new :aws_access_key_id => @config.access_key,
                                        :aws_secret_access_key => @config.secret_key,
                                        :region => @config.region
 
-        @ec2.describe_instances('instance-state-name' => 'running',
-                                'instance-id' => instances).body['reservationSet']
+        @attempts = 0
+        begin
+          @ec2.describe_instances('instance-state-name' => 'running',
+                                  'instance-id' => instances).body['reservationSet']
+        rescue Exception => e
+          if ((e.message == "Throttling => Rate exceeded") && (@attempts < 5)) 
+            @logger.info "Throttling rate exceeded"
+            SimpleDeploy::Backoff.exp_periods(@backoff_count < 5 ? @backoff_count : 5) do |backoff|
+              @logger.info "Backing off for #{backoff} seconds. Attempt = #{@attempts}"
+              sleep backoff
+            end
+            @attempts += 1
+            @backoff_count += 1
+            retry
+          end 
+        end
       end
 
       def cloud_formation
